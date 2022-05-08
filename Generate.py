@@ -36,6 +36,7 @@ class Extension:
 
     def Selected_File(self):
         self.selected_file = filedialog.askopenfilename(initialdir='C://', title='Select a icon file', filetypes = (("Text files", "*.png*"),))
+        self.lab_selected_file.config(text=f" Selected icon: {self.selected_file}")        
 
     def Resize_img(self):
         im = Image.open(self.selected_file)
@@ -51,26 +52,43 @@ class Extension:
         return os.path.basename(source)
 
     def Window(self):
+        lab_head = ttk.Label(text="Extension Properties", font=("Arial 20 bold"))
+        lab_head.pack(fill=tk.X, padx=5, pady=5)
+
+        canvas=Canvas(self.root, width=500, height=10)
+        canvas.pack()
+        canvas.create_line(5,5,350,5, fill="black", width=5)
+
         lab_name = ttk.Label(text="Extension name")
-        lab_name.pack(fill=tk.X, padx=5, pady=5)
+        lab_name.pack(fill=tk.X, padx=15, pady=5)
         self.ent_name = ttk.Entry(self.root)
-        self.ent_name.pack(fill=tk.X, padx=5, pady=5)
+        self.ent_name.pack(fill=tk.X, padx=15, pady=5)
 
         lab_ver = ttk.Label(text="App version")
-        lab_ver.pack(fill=tk.X, padx=5, pady=5)
+        lab_ver.pack(fill=tk.X, padx=15, pady=5)
         self.ent_ver = ttk.Entry(self.root)
-        self.ent_ver.pack(fill=tk.X, padx=5, pady=5)
+        self.ent_ver.pack(fill=tk.X, padx=15, pady=5)
 
         lab_ver = ttk.Label(text="Manifest version : 2 (default)")
-        lab_ver.pack(fill=tk.X, padx=5, pady=5)
+        lab_ver.pack(fill=tk.X, padx=15, pady=5)
 
         lab_html = ttk.Label(text="Default html file name (without .html)")
-        lab_html.pack(fill=tk.X, padx=5, pady=5)
+        lab_html.pack(fill=tk.X, padx=15, pady=5)
         self.ent_html = ttk.Entry(self.root)
-        self.ent_html.pack(fill=tk.X, padx=5, pady=5)
+        self.ent_html.pack(fill=tk.X, padx=15, pady=5)
+
+        lab_head = ttk.Label(text="Icon Properties", font=("Arial 20 bold"))
+        lab_head.pack(fill=tk.X, padx=5, pady=5)
+
+        canvas=Canvas(self.root, width=500, height=10)
+        canvas.pack()
+        canvas.create_line(5,5,350,5, fill="black", width=5)
 
         Final_butt = ttk.Button(self.root, text ="Select icon" , command=self.Selected_File)
         Final_butt.pack(fill=tk.X, padx=5, pady=5)
+
+        self.lab_selected_file = ttk.Label(text="icon path: ")
+        self.lab_selected_file.pack(fill=tk.X, padx=5, pady=5)
 
         Final_butt = ttk.Button(self.root, text ="SUBMIT" , command=self.get_value)
         Final_butt.pack(fill=tk.X, padx=5, pady=5)
