@@ -1,0 +1,7 @@
+How to add generated extension in google chrome?
+        -> Open settings
+        -> Click on extension tab
+        -> Turn on developer mode
+        -> Click on 'load unpacked'
+        -> Select the folder containing your extension
+        -> Your extension is added to chrome

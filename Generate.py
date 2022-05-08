@@ -3,6 +3,8 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+import os
+import shutil
 
 class Extension:
     def __init__(self, root):
@@ -33,7 +35,12 @@ class Extension:
 
     def Selected_File(self):
         self.selected_file = filedialog.askopenfilename(initialdir='C://', title='Select a icon file', filetypes = (("Text files", "*.png*"),))
-        print(self.selected_file)
+
+    def cpy(self, source):
+        destination = os.path.dirname(os.path.abspath(__file__)) + '/' + os.path.basename(source)
+
+        shutil.copyfile(source, destination)
+        return os.path.basename(source)
 
     def Window(self):
         lab_name = ttk.Label(text="Extension name")
@@ -67,7 +74,7 @@ class Extension:
             "manifest_version": MANIFEST_VERSION,
             "browser_action":{
                 "default_popup": f"{DEFAULT_POPUP}.html",
-                "default_icon": self.selected_file
+                "default_icon": self.cpy(self.selected_file)
             },
             "permissions":["activeTab"]
         }
