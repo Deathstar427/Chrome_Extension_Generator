@@ -5,6 +5,7 @@ from tkinter import ttk
 from tkinter import filedialog
 import os
 import shutil
+from PIL import Image
 
 class Extension:
     def __init__(self, root):
@@ -36,8 +37,15 @@ class Extension:
     def Selected_File(self):
         self.selected_file = filedialog.askopenfilename(initialdir='C://', title='Select a icon file', filetypes = (("Text files", "*.png*"),))
 
+    def Resize_img(self):
+        im = Image.open(self.selected_file)
+        resized_im_16 = im.resize((16, 16))
+        resized_im_48 = im.resize((48,48))
+        resized_im_16.save(f'./{self.APP_NAME}/16x16.png')
+        resized_im_48.save(f'./{self.APP_NAME}/48x48.png')
+
     def cpy(self, source):
-        destination = os.path.dirname(os.path.abspath(__file__)) + '/' + os.path.basename(source)
+        destination = os.path.dirname(os.path.abspath(__file__)) + f'/{self.APP_NAME}/' + '128x128.png'
 
         shutil.copyfile(source, destination)
         return os.path.basename(source)
@@ -67,40 +75,47 @@ class Extension:
         Final_butt = ttk.Button(self.root, text ="SUBMIT" , command=self.get_value)
         Final_butt.pack(fill=tk.X, padx=5, pady=5)
 
-    def Create(self, APP_NAME, APP_VERSION, MANIFEST_VERSION, DEFAULT_POPUP):
+    def Create(self):
+        
+        os.mkdir(self.APP_NAME)
         default_manifest = {
-            "name": APP_NAME,
-            "version": APP_VERSION,
-            "manifest_version": MANIFEST_VERSION,
+            "name": self.APP_NAME,
+            "version": self.APP_VERSION,
+            "self.MANIFEST_VERSION": self.MANIFEST_VERSION,
             "browser_action":{
-                "default_popup": f"{DEFAULT_POPUP}.html",
+                "self.DEFAULT_POPUP": f"{self.DEFAULT_POPUP}.html",
                 "default_icon": self.cpy(self.selected_file)
+            },
+            "icons":{
+                "128":"128x128.png",
+                "48":"48x48.png",
+                "16":"16x16.png"
             },
             "permissions":["activeTab"]
         }
 
-        with open(f"{DEFAULT_POPUP}.html", "w") as f:
+        self.Resize_img()
+        
+        with open(f"./{self.APP_NAME}/{self.DEFAULT_POPUP}.html", "w") as f:
             f.write(self.default_code)
 
-        with open("manifest.json", "w") as f:
+        with open(f"./{self.APP_NAME}/manifest.json", "w") as f:
             json.dump(default_manifest, f)
 
-        with open("HOW_TO_ADD_EXTENSION.txt", 'w') as f:
+        with open(f"./{self.APP_NAME}/HOW_TO_ADD_EXTENSION.txt", 'w') as f:
             f.write(self.READ_ME)
+        
 
     def get_value(self):
-        APP_NAME = self.ent_name.get()
-        APP_VERSION = self.ent_ver.get()
-        MANIFEST_VERSION = 2
-        DEFAULT_POPUP = self.ent_html.get()
+        self.APP_NAME = self.ent_name.get()
+        self.APP_VERSION = self.ent_ver.get()
+        self.MANIFEST_VERSION = 2
+        self.DEFAULT_POPUP = self.ent_html.get()
 
-        print(APP_NAME, APP_VERSION, MANIFEST_VERSION, DEFAULT_POPUP)
-        self.Create(APP_NAME, APP_VERSION, MANIFEST_VERSION, DEFAULT_POPUP)
+        print(self.APP_NAME, self.APP_VERSION, self.MANIFEST_VERSION, self.DEFAULT_POPUP)
+        self.Create()
         self.root.destroy()
 
-    
-
-
 root = tk.Tk()
-Extension(root)
+App = Extension(root)
 root.mainloop()
